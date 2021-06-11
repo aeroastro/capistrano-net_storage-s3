@@ -86,7 +86,7 @@ set :net_storage_s3_bucket, 'example-bucket'
 ## Example
 
 You can see typical usage of this library by
-[capistrano-net_storage_demo](https://github.com/DeNADev/capistrano-net_storage_demo/tree/net_storage-s3).
+[capistrano-net_storage_demo](https://github.com/DeNADev/capistrano-net_storage_demo).
 
 ## License
 
