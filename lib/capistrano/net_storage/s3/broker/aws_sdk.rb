@@ -38,7 +38,9 @@ class Capistrano::NetStorage::S3::Broker::AwsSdk < Capistrano::NetStorage::S3::B
     ns = net_storage
     on ns.servers, in: :groups, limit: ns.max_parallels do
       within releases_path do
-        @s3.get_object({ bucket: c.net_storage_s3_bucket, key: c.archive_url }, target: ns.archive_path)
+        Retriable.retriable on: [Aws::S3::Errors::ServiceError], tries: 3, base_interval: 5 do
+          @s3.get_object({ bucket: c.net_storage_s3_bucket, key: c.archive_url }, target: ns.archive_path)
+        end
       end
     end
   end
