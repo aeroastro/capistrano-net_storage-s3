@@ -3,6 +3,7 @@ require 'uri'
 require 'capistrano/net_storage/s3/base'
 require 'capistrano/net_storage/s3/error'
 require 'capistrano/net_storage/s3/broker/aws_cli'
+require 'capistrano/net_storage/s3/broker/aws_sdk'
 
 class Capistrano::NetStorage::S3
   class Config
@@ -13,6 +14,8 @@ class Capistrano::NetStorage::S3
         case fetch(:net_storage_s3_broker, :aws_cli)
         when :aws_cli
           Broker::AwsCLI.new
+        when :aws_sdk
+          Broker::AwsSdk.new
         else
           raise Capistrano::NetStorage::S3::Error, "No broker defined! #{fetch(:net_storage_s3_broker)}"
         end
