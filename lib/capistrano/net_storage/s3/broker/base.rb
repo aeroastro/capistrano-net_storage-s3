@@ -24,6 +24,11 @@ class Capistrano::NetStorage::S3
         raise NotImplementedError
       end
 
+      # @abstract
+      def cleanup
+        raise NotImplementedError
+      end
+
       private
 
       def config
