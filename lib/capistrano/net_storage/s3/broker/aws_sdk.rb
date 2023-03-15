@@ -42,4 +42,20 @@ class Capistrano::NetStorage::S3::Broker::AwsSdk < Capistrano::NetStorage::S3::B
       end
     end
   end
+
+  def cleanup
+    c = config
+    s3_client = Aws::S3::Client.new(
+      access_key_id: c.aws_access_key_id,
+      secret_access_key: c.aws_secret_access_key,
+      session_token: c.aws_session_token,
+      region: c.aws_region
+    )
+    resp = s3_client.list_objects(bucket: c.bucket, prefix: c.archives_directory)
+    objects = resp.contents.sort_by { |obj| obj.last_modified }
+    c.s3_keep_releases.times { objects.pop }
+    objects.each do |obj|
+      s3_client.delete_object(bucket: c.bucket, key: obj.key)
+    end
+  end
 end
